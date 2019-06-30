@@ -4,10 +4,6 @@ const createError = require('./modules/createError')
 const omit = require('./modules/omit')
 const { apiVersion, regionToEndpoint } = require('./constants')
 
-// A minimal replacement for AWS DocumentClient. Mainly this was added
-// because the SDK resists bundling with rollup.
-// https://github.com/aws/aws-sdk-js/issues/1769
-
 const credentials = {
   sessionToken: process.env.AWS_SESSION_TOKEN,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -75,3 +71,5 @@ const configureDb = (options = {}) => {
 }
 
 module.exports = configureDb
+module.exports.marshall = require('./marshall')
+module.exports.unmarshall = require('./unmarshall')
