@@ -38,7 +38,6 @@ const makeRequest = (host, action) => async data => {
       ...omit(signedRequest, ['headers', 'body'])
     })
   } catch (error) {
-    console.log(error.response.data)
     if (!error.response) throw error
     const { status, data } = error.response
     const dynamoError = createError(status, data.Message, error)
