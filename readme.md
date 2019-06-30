@@ -5,3 +5,43 @@ A minimalist replacement for AWS [DynamoDb DocumentClient](https://docs.aws.amaz
 ## Usage
 
 For now see [test suite](./__tests__) for usage
+
+## API
+
+### Client
+
+#### Configure
+
+###### `dynamodb()`
+
+##### Operations
+
+###### `get()`
+
+###### `put()`
+
+###### `update()`
+
+###### `delete()`
+
+###### `query()`
+
+###### `scan()`
+
+###### `batchGet()`
+
+###### `batchWrite()`
+
+###### `transactGet()`
+
+###### `transactWrite()`
+
+###### `createTable()`
+
+###### `describeTable()`
+
+#### Conversion
+
+###### `marshall(obj|arr)`
+
+###### `unmarshall(obj|arr)`
