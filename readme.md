@@ -1,4 +1,4 @@
-# DynamoDB Axios [![CircleCI](https://circleci.com/gh/possibilities/dynamodb-axios.svg?style=svg)](https://circleci.com/gh/possibilities/dynamodb-axios)
+# AWS DynamoDB with Axios [![CircleCI](https://circleci.com/gh/possibilities/aws-dynamodb-axios.svg?style=svg)](https://circleci.com/gh/possibilities/aws-dynamodb-axios)
 
 A small replacement for AWS [DynamoDb DocumentClient](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) and [DynamoDB Converter](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/Converter.html) based on the [Axios request library](https://github.com/axios/axios) and [AWS4](https://github.com/mhart/aws4).
 
