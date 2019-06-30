@@ -1,4 +1,4 @@
-const unmarshall = require('../unmarshall')
+const { unmarshall } = require('../index')
 
 describe('unmarshall', () => {
   test('unpacks scalar values', async () => {

@@ -1,4 +1,4 @@
-const marshall = require('../marshall')
+const { marshall } = require('../index')
 
 describe('marshall', () => {
   test('packs scalar values', async () => {
