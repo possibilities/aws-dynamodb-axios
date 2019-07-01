@@ -17,12 +17,12 @@ module.exports = async () => {
       TableName: testTableName,
       BillingMode: 'PAY_PER_REQUEST',
       AttributeDefinitions: [
-        { AttributeName: 'pk', AttributeType: 'S' },
-        { AttributeName: 'sk', AttributeType: 'S' }
+        { AttributeName: 'hash', AttributeType: 'S' },
+        { AttributeName: 'range', AttributeType: 'S' }
       ],
       KeySchema: [
-        { AttributeName: 'pk', KeyType: 'HASH' },
-        { AttributeName: 'sk', KeyType: 'RANGE' }
+        { AttributeName: 'hash', KeyType: 'HASH' },
+        { AttributeName: 'range', KeyType: 'RANGE' }
       ]
     })
     while (true) {

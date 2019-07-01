@@ -17,34 +17,34 @@ describe('client', () => {
     test('#put', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: 'foo', sk: 'bar' })
+        Item: marshall({ hash: 'foo', range: 'bar' })
       })
       const { Items: items } =
         await db.scan({ TableName: testTableName })
-      expect(unmarshall(items)).toEqual([{ pk: 'foo', sk: 'bar' }])
+      expect(unmarshall(items)).toEqual([{ hash: 'foo', range: 'bar' }])
     })
 
     test('#get', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: 'foo', sk: 'bar' })
+        Item: marshall({ hash: 'foo', range: 'bar' })
       })
       const fetched = await db.get({
         TableName: testTableName,
-        Key: marshall({ pk: 'foo', sk: 'bar' })
+        Key: marshall({ hash: 'foo', range: 'bar' })
       })
-      expect(unmarshall(fetched.Item.pk)).toBe('foo')
-      expect(unmarshall(fetched.Item.sk)).toBe('bar')
+      expect(unmarshall(fetched.Item.hash)).toBe('foo')
+      expect(unmarshall(fetched.Item.range)).toBe('bar')
     })
 
     test('#update', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: 'foo', sk: 'bar', foo: 'before' })
+        Item: marshall({ hash: 'foo', range: 'bar', foo: 'before' })
       })
       await db.update({
         TableName: testTableName,
-        Key: marshall({ pk: 'foo', sk: 'bar' }),
+        Key: marshall({ hash: 'foo', range: 'bar' }),
         UpdateExpression: 'set foo = :val',
         ExpressionAttributeValues: marshall({
           ':val': 'after'
@@ -57,11 +57,11 @@ describe('client', () => {
     test('#delete', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: 'foo', sk: 'bar' })
+        Item: marshall({ hash: 'foo', range: 'bar' })
       })
       await db.delete({
         TableName: testTableName,
-        Key: marshall({ pk: 'foo', sk: 'bar' })
+        Key: marshall({ hash: 'foo', range: 'bar' })
       })
       const { Items: items } =
         await db.scan({ TableName: testTableName })
@@ -71,23 +71,27 @@ describe('client', () => {
     test('#query', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: 'foo', sk: 'bar#1' })
+        Item: marshall({ hash: 'foo', range: 'bar#1' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: 'foo', sk: 'bar#2' })
+        Item: marshall({ hash: 'foo', range: 'bar#2' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: 'foo', sk: 'fuff#2' })
+        Item: marshall({ hash: 'foo', range: 'fuff#2' })
       })
       const { Items: items } = await db.query({
         TableName: testTableName,
-        KeyConditionExpression: 'pk = :subjectId and begins_with(sk, :role)',
+        KeyConditionExpression: '#hash = :subjectId and begins_with(#range, :role)',
         ExpressionAttributeValues: marshall({
           ':subjectId': 'foo',
           ':role': 'bar#'
-        })
+        }),
+        ExpressionAttributeNames: {
+          '#hash': 'hash',
+          '#range': 'range',
+        }
       })
       expect(unmarshall(items)).toHaveLength(2)
     })
@@ -95,99 +99,99 @@ describe('client', () => {
     test('#scan', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '1', sk: 'a' })
+        Item: marshall({ hash: '1', range: 'a' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '2', sk: 'b' })
+        Item: marshall({ hash: '2', range: 'b' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '3', sk: 'c' })
+        Item: marshall({ hash: '3', range: 'c' })
       })
       const { Items: items } =
         await db.scan({ TableName: testTableName })
-      expect(unmarshall(items).map(i => i.pk).sort()).toEqual(['1', '2', '3'])
+      expect(unmarshall(items).map(i => i.hash).sort()).toEqual(['1', '2', '3'])
     })
 
     test('#batchWrite', async () => {
       await db.batchWrite({
         RequestItems: {
           [testTableName]: [
-            { PutRequest: { Item: marshall({ pk: '1', sk: 'a' }) } },
-            { PutRequest: { Item: marshall({ pk: '2', sk: 'b' }) } },
-            { PutRequest: { Item: marshall({ pk: '3', sk: 'c' }) } }
+            { PutRequest: { Item: marshall({ hash: '1', range: 'a' }) } },
+            { PutRequest: { Item: marshall({ hash: '2', range: 'b' }) } },
+            { PutRequest: { Item: marshall({ hash: '3', range: 'c' }) } }
           ]
         }
       })
       const { Items: items } =
         await db.scan({ TableName: testTableName })
-      expect(unmarshall(items).map(i => i.pk).sort()).toEqual(['1', '2', '3'])
+      expect(unmarshall(items).map(i => i.hash).sort()).toEqual(['1', '2', '3'])
     })
 
     test('#batchGet', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '1', sk: 'a' })
+        Item: marshall({ hash: '1', range: 'a' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '2', sk: 'b' })
+        Item: marshall({ hash: '2', range: 'b' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '3', sk: 'c' })
+        Item: marshall({ hash: '3', range: 'c' })
       })
       const response = await db.batchGet({
         RequestItems: {
           [testTableName]: {
             Keys: marshall([
-              { pk: '1', sk: 'a' },
-              { pk: '2', sk: 'b' },
-              { pk: '3', sk: 'c' }
+              { hash: '1', range: 'a' },
+              { hash: '2', range: 'b' },
+              { hash: '3', range: 'c' }
             ])
           }
         }
       })
       const data = response.Responses[testTableName]
-      expect(unmarshall(data).map(i => i.pk).sort())
+      expect(unmarshall(data).map(i => i.hash).sort())
         .toEqual(['1', '2', '3'])
     })
 
     test('#transactWrite', async () => {
       await db.transactWrite({
         TransactItems: [
-          { Put: { TableName: testTableName, Item: marshall({ pk: '1', sk: 'a' }) } },
-          { Put: { TableName: testTableName, Item: marshall({ pk: '2', sk: 'b' }) } },
-          { Put: { TableName: testTableName, Item: marshall({ pk: '3', sk: 'c' }) } }
+          { Put: { TableName: testTableName, Item: marshall({ hash: '1', range: 'a' }) } },
+          { Put: { TableName: testTableName, Item: marshall({ hash: '2', range: 'b' }) } },
+          { Put: { TableName: testTableName, Item: marshall({ hash: '3', range: 'c' }) } }
         ]
       })
       const { Items: items } =
         await db.scan({ TableName: testTableName })
-      expect(unmarshall(items).map(i => i.pk).sort()).toEqual(['1', '2', '3'])
+      expect(unmarshall(items).map(i => i.hash).sort()).toEqual(['1', '2', '3'])
     })
 
     test('#transactGet', async () => {
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '1', sk: 'a' })
+        Item: marshall({ hash: '1', range: 'a' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '2', sk: 'b' })
+        Item: marshall({ hash: '2', range: 'b' })
       })
       await db.put({
         TableName: testTableName,
-        Item: marshall({ pk: '3', sk: 'c' })
+        Item: marshall({ hash: '3', range: 'c' })
       })
       const response = await db.transactGet({
         TransactItems: [
-          { Get: { Key: marshall({ pk: '1', sk: 'a' }), TableName: testTableName } },
-          { Get: { Key: marshall({ pk: '2', sk: 'b' }), TableName: testTableName } },
-          { Get: { Key: marshall({ pk: '3', sk: 'c' }), TableName: testTableName } }
+          { Get: { Key: marshall({ hash: '1', range: 'a' }), TableName: testTableName } },
+          { Get: { Key: marshall({ hash: '2', range: 'b' }), TableName: testTableName } },
+          { Get: { Key: marshall({ hash: '3', range: 'c' }), TableName: testTableName } }
         ]
       })
-      expect(unmarshall(response.Responses).map(r => r.Item.pk).sort())
+      expect(unmarshall(response.Responses).map(r => r.Item.hash).sort())
         .toEqual(['1', '2', '3'])
     })
   })

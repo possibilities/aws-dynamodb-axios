@@ -36,6 +36,7 @@ const buildHandler = ({ client, host, url, protocol }) =>
           ...omit(signedRequest, aws4OnlyProperties)
         })
       } catch (error) {
+        console.log(error.response.data)
         if (!error.response) throw error
         const { status, data: errorData } = error.response
         const dynamoError = createError(status, errorData.message, error)

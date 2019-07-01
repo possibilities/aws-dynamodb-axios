@@ -13,7 +13,7 @@ const clearDatabase = async (db, tableName) => {
     await db.batchWrite({
       RequestItems: {
         [tableName]: response.Items.map(item => (
-          { DeleteRequest: { Key: pick(item, ['pk', 'sk']) } }
+          { DeleteRequest: { Key: pick(item, ['hash', 'range']) } }
         ))
       }
     })
