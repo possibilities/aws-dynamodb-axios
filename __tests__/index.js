@@ -90,7 +90,7 @@ describe('client', () => {
         }),
         ExpressionAttributeNames: {
           '#hash': 'hash',
-          '#range': 'range',
+          '#range': 'range'
         }
       })
       expect(unmarshall(items)).toHaveLength(2)
