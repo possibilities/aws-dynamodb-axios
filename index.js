@@ -38,7 +38,7 @@ const buildHandler = ({ client, host, url, protocol }) =>
       } catch (error) {
         if (!error.response) throw error
         const { status, data: errorData } = error.response
-        const dynamoError = createError(status, errorData.Message, error)
+        const dynamoError = createError(status, errorData.message, error)
         dynamoError.data = error.response.data
         throw dynamoError
       }
