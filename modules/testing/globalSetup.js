@@ -1,7 +1,11 @@
 const configureDb = require('../../index')
-const db = configureDb({ region: 'us-east-1', host: '127.0.0.1:9987' })
 
-const testTableName = 'dynamodb-client-tests'
+const db = configureDb({
+  region: process.env.dynamoDbRegion,
+  host: process.env.dynamoDbHost
+})
+
+const testTableName = process.env.dynamoDbTableName
 
 module.exports = async () => {
   const existingTable = await db.describeTable({

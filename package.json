@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "test": "jest --verbose --runInBand",
+    "test": "./test-local.sh",
+    "test-remote": "./test-remote.sh",
     "lint": "standard"
   },
   "dependencies": {

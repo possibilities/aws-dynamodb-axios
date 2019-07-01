@@ -3,9 +3,12 @@ const clearDatabase = require('../modules/testing/clearDatabase')
 const marshall = require('../marshall')
 const unmarshall = require('../unmarshall')
 
-const db = configureDb({ region: 'us-east-1', host: '127.0.0.1:9987' })
+const db = configureDb({
+  region: process.env.dynamoDbRegion,
+  host: process.env.dynamoDbHost
+})
 
-const testTableName = 'dynamodb-client-tests'
+const testTableName = process.env.dynamoDbTableName
 
 describe('client', () => {
   beforeEach(async () => clearDatabase(db, testTableName))
@@ -42,12 +45,11 @@ describe('client', () => {
       TableName: testTableName,
       Key: marshall({ pk: 'foo', sk: 'bar' }),
       UpdateExpression: 'set foo = :val',
-      ExpressionAttributeValues: {
+      ExpressionAttributeValues: marshall({
         ':val': 'after'
-      }
+      })
     })
-    const { Items: items } =
-      await db.scan({ TableName: testTableName })
+    const { Items: items } = await db.scan({ TableName: testTableName })
     expect(unmarshall(items).map(i => i.foo)).toEqual(['after'])
   })
 
