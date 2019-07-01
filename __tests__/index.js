@@ -1,9 +1,9 @@
-const configureDb = require('../index')
+const dynamodb = require('../index')
 const clearDatabase = require('../modules/testing/clearDatabase')
 const marshall = require('../marshall')
 const unmarshall = require('../unmarshall')
 
-const db = configureDb({
+const db = dynamodb({
   region: process.env.dynamoDbRegion,
   host: process.env.dynamoDbHost
 })

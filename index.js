@@ -60,7 +60,7 @@ const allApiVerbs = [
   'head'
 ]
 
-const configureDb = (options = {}) => {
+const dynamodb = (options = {}) => {
   const host = options.host || regionToEndpoint[options.region]
 
   // To support local development use non-ssl protocol
@@ -86,6 +86,6 @@ const configureDb = (options = {}) => {
   }
 }
 
-module.exports = configureDb
+module.exports = dynamodb
 module.exports.marshall = require('./marshall')
 module.exports.unmarshall = require('./unmarshall')

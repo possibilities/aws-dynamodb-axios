@@ -1,6 +1,6 @@
-const configureDb = require('../../index')
+const dynamodb = require('../../index')
 
-const db = configureDb({
+const db = dynamodb({
   region: process.env.dynamoDbRegion,
   host: process.env.dynamoDbHost
 })
