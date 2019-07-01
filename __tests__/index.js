@@ -194,10 +194,10 @@ describe('client', () => {
 
   test('error normalization', async () => {
     try {
-      await db.put({})
+      await db.put({ TableName: testTableName })
     } catch (error) {
       expect(error.statusCode).toEqual(400)
-      expect(error.message.includes('validation errors detected')).toBeTruthy()
+      expect(error.message).toEqual(error.data.message)
       expect(error.data.__type.endsWith('ValidationException')).toBeTruthy()
       return
     }
