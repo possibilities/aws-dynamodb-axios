@@ -12,36 +12,36 @@ For now see [test suite](./__tests__) for usage
 
 #### Configure
 
-###### `dynamodb()`
+##### `dynamodb()`
 
-##### Operations
+#### Operations
 
-###### `get()`
+##### `get()`
 
-###### `put()`
+##### `put()`
 
-###### `update()`
+##### `update()`
 
-###### `delete()`
+##### `delete()`
 
-###### `query()`
+##### `query()`
 
-###### `scan()`
+##### `scan()`
 
-###### `batchGet()`
+##### `batchGet()`
 
-###### `batchWrite()`
+##### `batchWrite()`
 
-###### `transactGet()`
+##### `transactGet()`
 
-###### `transactWrite()`
+##### `transactWrite()`
 
-###### `createTable()`
+##### `createTable()`
 
-###### `describeTable()`
+##### `describeTable()`
 
-#### Conversion
+### Conversion
 
-###### `marshall(obj|arr)`
+##### `marshall(obj|arr)`
 
-###### `unmarshall(obj|arr)`
+##### `unmarshall(obj|arr)`
