@@ -20,15 +20,11 @@ const buildHandler = ({ client, host, url, protocol }) =>
         'Content-Type': 'application/x-amz-json-1.0'
       }
 
+      // `aws4` expects `body`, `axios` expects `data`
+      const body = JSON.stringify(data)
+
       const signedRequest = aws4.sign(
-        {
-          url,
-          host,
-          headers,
-          method: 'POST',
-          // `aws4` expects `body`, `axios` expects `data`
-          body: JSON.stringify(data)
-        },
+        { url, body, host, headers, method: 'POST' },
         credentials
       )
 
@@ -66,6 +62,7 @@ const dynamodb = (options = {}) => {
   // To support local development use non-ssl protocol
   const protocol = host.startsWith('dynamodb.') ? 'https' : 'http'
   const url = `${protocol}://${host}`
+
   const client = axios.create({ baseURL: url })
   const createHandler = buildHandler({ url, host, client })
 
