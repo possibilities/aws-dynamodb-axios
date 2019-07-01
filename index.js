@@ -45,10 +45,7 @@ const buildHandler = ({ client, host, url, protocol }) =>
         throw dynamoError
       }
 
-      // When calling GetItem if nothing exists an empty object is returned.
-      // Here an empty object is replaced with null as a signal to callee that
-      // the item could not be found.
-      return Object.keys(response.data).length ? response.data : null
+      return response.data
     }
 
 const configureDb = (options = {}) => {
