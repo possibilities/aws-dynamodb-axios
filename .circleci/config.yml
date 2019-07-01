@@ -4,7 +4,7 @@ jobs:
     machine: true
     steps:
     - checkout
-    - run: docker-compose up -d dynamodb
+    - run: docker-compose up -d
     - run: docker-compose run node yarn install
     - run: docker-compose run node yarn lint
     - run: docker-compose run node yarn test
