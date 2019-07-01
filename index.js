@@ -10,6 +10,8 @@ const credentials = {
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 }
 
+const aws4OnlyProperties = ['headers', 'body', 'url', 'host']
+
 const buildHandler = ({ client, host, url, protocol }) =>
   action =>
     async data => {
@@ -35,7 +37,7 @@ const buildHandler = ({ client, host, url, protocol }) =>
         response = await client({
           data,
           headers,
-          ...omit(signedRequest, ['headers', 'body', 'url', 'host'])
+          ...omit(signedRequest, aws4OnlyProperties)
         })
       } catch (error) {
         if (!error.response) throw error
@@ -48,6 +50,16 @@ const buildHandler = ({ client, host, url, protocol }) =>
       return response.data
     }
 
+const allApiVerbs = [
+  'get',
+  'put',
+  'options',
+  'patch',
+  'post',
+  'delete',
+  'head'
+]
+
 const configureDb = (options = {}) => {
   const host = options.host || regionToEndpoint[options.region]
 
@@ -58,6 +70,7 @@ const configureDb = (options = {}) => {
   const createHandler = buildHandler({ url, host, client })
 
   return {
+    ...omit(client, allApiVerbs),
     put: createHandler('PutItem'),
     get: createHandler('GetItem'),
     delete: createHandler('DeleteItem'),
