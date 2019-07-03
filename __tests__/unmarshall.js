@@ -9,6 +9,8 @@ describe('unmarshall', () => {
     expect(unmarshall({ BOOL: false })).toEqual(false)
     expect(unmarshall({ M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }))
       .toEqual({ foo: 'bar', moof: 'doof' })
+    expect(unmarshall({ SS: ['foo', 'bar'] }))
+      .toEqual(['foo', 'bar'])
   })
 
   test('unpacks objects', async () => {
@@ -18,14 +20,16 @@ describe('unmarshall', () => {
       null: { NULL: true },
       boolTruthy: { BOOL: true },
       boolFalsy: { BOOL: false },
-      map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
+      map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+      stringset: { SS: ['foo', 'bar'] }
     })).toEqual({
       string: 'foo',
       number: 2,
       null: null,
       boolTruthy: true,
       boolFalsy: false,
-      map: { foo: 'bar', moof: 'doof' }
+      map: { foo: 'bar', moof: 'doof' },
+      stringset: ['foo', 'bar']
     })
   })
 
@@ -37,7 +41,8 @@ describe('unmarshall', () => {
         null: { NULL: true },
         boolTruthy: { BOOL: true },
         boolFalsy: { BOOL: false },
-        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+        stringset: { SS: ['foo', 'bar'] }
       },
       {
         string: { S: 'foo' },
@@ -45,7 +50,8 @@ describe('unmarshall', () => {
         null: { NULL: true },
         boolTruthy: { BOOL: true },
         boolFalsy: { BOOL: false },
-        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+        stringset: { SS: ['foo', 'bar'] }
       }
     ])).toEqual([
       {
@@ -54,7 +60,8 @@ describe('unmarshall', () => {
         null: null,
         boolTruthy: true,
         boolFalsy: false,
-        map: { foo: 'bar', moof: 'doof' }
+        map: { foo: 'bar', moof: 'doof' },
+        stringset: ['foo', 'bar']
       },
       {
         string: 'foo',
@@ -62,7 +69,8 @@ describe('unmarshall', () => {
         null: null,
         boolTruthy: true,
         boolFalsy: false,
-        map: { foo: 'bar', moof: 'doof' }
+        map: { foo: 'bar', moof: 'doof' },
+        stringset: ['foo', 'bar']
       }
     ])
   })

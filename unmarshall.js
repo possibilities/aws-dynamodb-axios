@@ -9,7 +9,8 @@ const types = {
   N: true,
   NULL: true,
   BOOL: true,
-  M: true
+  M: true,
+  SS: true
 }
 
 const unmarshall = attributeValue => {
@@ -36,6 +37,8 @@ const unmarshall = attributeValue => {
       return val
     case 'M':
       return unmarshall(val)
+    case 'SS':
+      return val
   }
   throw new Error(`Unmarshalling type \`${key}\` is not yet supported`)
 }

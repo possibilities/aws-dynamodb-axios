@@ -8,6 +8,7 @@ describe('marshall', () => {
     expect(marshall(true)).toEqual({ BOOL: true })
     expect(marshall(false)).toEqual({ BOOL: false })
     expect(marshall({ foo: 'bar' })).toEqual({ foo: { S: 'bar' } })
+    expect(marshall(['foo', 'bar'])).toEqual({ SS: ['foo', 'bar'] })
     expect(marshall(undefined)).toEqual(undefined)
   })
 
@@ -18,14 +19,16 @@ describe('marshall', () => {
       null: null,
       boolTruthy: true,
       boolFalsy: false,
-      map: { foo: 'bar', moof: 'doof' }
+      map: { foo: 'bar', moof: 'doof' },
+      stringset: ['foo', 'bar']
     })).toEqual({
       string: { S: 'foo' },
       number: { N: '2' },
       null: { NULL: true },
       boolTruthy: { BOOL: true },
       boolFalsy: { BOOL: false },
-      map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
+      map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+      stringset: { SS: ['foo', 'bar'] }
     })
   })
 
@@ -37,7 +40,8 @@ describe('marshall', () => {
         null: null,
         boolTruthy: true,
         boolFalsy: false,
-        map: { foo: 'bar', moof: 'doof' }
+        map: { foo: 'bar', moof: 'doof' },
+        stringset: ['foo', 'bar']
       },
       {
         string: 'foo',
@@ -45,7 +49,8 @@ describe('marshall', () => {
         null: null,
         boolTruthy: true,
         boolFalsy: false,
-        map: { foo: 'bar', moof: 'doof' }
+        map: { foo: 'bar', moof: 'doof' },
+        stringset: ['foo', 'bar']
       }
     ])).toEqual([
       {
@@ -54,7 +59,8 @@ describe('marshall', () => {
         null: { NULL: true },
         boolTruthy: { BOOL: true },
         boolFalsy: { BOOL: false },
-        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+        stringset: { SS: ['foo', 'bar'] }
       },
       {
         string: { S: 'foo' },
@@ -62,7 +68,8 @@ describe('marshall', () => {
         null: { NULL: true },
         boolTruthy: { BOOL: true },
         boolFalsy: { BOOL: false },
-        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+        stringset: { SS: ['foo', 'bar'] }
       }
     ])
   })
