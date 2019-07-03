@@ -4,21 +4,39 @@ const mapValues = require('./modules/mapValues')
 // because the SDK resists bundling with rollup.
 // https://github.com/aws/aws-sdk-js/issues/1769
 
+const types = {
+  S: true,
+  N: true,
+  NULL: true,
+  BOOL: true,
+  M: true
+}
+
 const unmarshall = attributeValue => {
   if (attributeValue === null || attributeValue === undefined) return null
   const key = Object.keys(attributeValue).pop()
   const val = Object.values(attributeValue).pop()
-  if (!['S', 'N', 'NULL', 'BOOL'].includes(key)) {
+  if (!types[key]) {
     if (Array.isArray(attributeValue)) {
       return attributeValue.map(unmarshall)
     } else {
       return mapValues(attributeValue, unmarshall)
     }
   }
-  if (key === 'S') return val
-  if (key === 'N') return parseInt(val, 10)
-  if (key === 'NULL' && val === true) return null
-  if (key === 'BOOL') return val
+
+  switch (key) {
+    case 'S':
+      return val
+    case 'N':
+      return parseInt(val, 10)
+    case 'NULL':
+      if (val === true) return null
+      break
+    case 'BOOL':
+      return val
+    case 'M':
+      return unmarshall(val)
+  }
   throw new Error(`Unmarshalling type \`${key}\` is not yet supported`)
 }
 

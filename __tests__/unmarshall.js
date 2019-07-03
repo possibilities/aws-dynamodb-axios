@@ -7,6 +7,8 @@ describe('unmarshall', () => {
     expect(unmarshall({ NULL: true })).toEqual(null)
     expect(unmarshall({ BOOL: true })).toEqual(true)
     expect(unmarshall({ BOOL: false })).toEqual(false)
+    expect(unmarshall({ M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }))
+      .toEqual({ foo: 'bar', moof: 'doof' })
   })
 
   test('unpacks objects', async () => {
@@ -15,13 +17,15 @@ describe('unmarshall', () => {
       number: { N: '2' },
       null: { NULL: true },
       boolTruthy: { BOOL: true },
-      boolFalsy: { BOOL: false }
+      boolFalsy: { BOOL: false },
+      map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
     })).toEqual({
       string: 'foo',
       number: 2,
       null: null,
       boolTruthy: true,
-      boolFalsy: false
+      boolFalsy: false,
+      map: { foo: 'bar', moof: 'doof' }
     })
   })
 
@@ -32,14 +36,16 @@ describe('unmarshall', () => {
         number: { N: '2' },
         null: { NULL: true },
         boolTruthy: { BOOL: true },
-        boolFalsy: { BOOL: false }
+        boolFalsy: { BOOL: false },
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
       },
       {
         string: { S: 'foo' },
         number: { N: '2' },
         null: { NULL: true },
         boolTruthy: { BOOL: true },
-        boolFalsy: { BOOL: false }
+        boolFalsy: { BOOL: false },
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
       }
     ])).toEqual([
       {
@@ -47,14 +53,16 @@ describe('unmarshall', () => {
         number: 2,
         null: null,
         boolTruthy: true,
-        boolFalsy: false
+        boolFalsy: false,
+        map: { foo: 'bar', moof: 'doof' }
       },
       {
         string: 'foo',
         number: 2,
         null: null,
         boolTruthy: true,
-        boolFalsy: false
+        boolFalsy: false,
+        map: { foo: 'bar', moof: 'doof' }
       }
     ])
   })

@@ -7,6 +7,7 @@ describe('marshall', () => {
     expect(marshall(null)).toEqual({ NULL: true })
     expect(marshall(true)).toEqual({ BOOL: true })
     expect(marshall(false)).toEqual({ BOOL: false })
+    expect(marshall({ foo: 'bar' })).toEqual({ foo: { S: 'bar' } })
     expect(marshall(undefined)).toEqual(undefined)
   })
 
@@ -16,13 +17,15 @@ describe('marshall', () => {
       number: 2,
       null: null,
       boolTruthy: true,
-      boolFalsy: false
+      boolFalsy: false,
+      map: { foo: 'bar', moof: 'doof' }
     })).toEqual({
       string: { S: 'foo' },
       number: { N: '2' },
       null: { NULL: true },
       boolTruthy: { BOOL: true },
-      boolFalsy: { BOOL: false }
+      boolFalsy: { BOOL: false },
+      map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
     })
   })
 
@@ -33,14 +36,16 @@ describe('marshall', () => {
         number: 2,
         null: null,
         boolTruthy: true,
-        boolFalsy: false
+        boolFalsy: false,
+        map: { foo: 'bar', moof: 'doof' }
       },
       {
         string: 'foo',
         number: 2,
         null: null,
         boolTruthy: true,
-        boolFalsy: false
+        boolFalsy: false,
+        map: { foo: 'bar', moof: 'doof' }
       }
     ])).toEqual([
       {
@@ -48,14 +53,16 @@ describe('marshall', () => {
         number: { N: '2' },
         null: { NULL: true },
         boolTruthy: { BOOL: true },
-        boolFalsy: { BOOL: false }
+        boolFalsy: { BOOL: false },
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
       },
       {
         string: { S: 'foo' },
         number: { N: '2' },
         null: { NULL: true },
         boolTruthy: { BOOL: true },
-        boolFalsy: { BOOL: false }
+        boolFalsy: { BOOL: false },
+        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } }
       }
     ])
   })
