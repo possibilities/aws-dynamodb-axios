@@ -67,7 +67,7 @@ const dynamodb = (options = {}) => {
   const createHandler = buildHandler({ url, host, client })
 
   return {
-    ...omit(client, allApiVerbs),
+    interceptors: client.interceptors,
     put: createHandler('PutItem'),
     get: createHandler('GetItem'),
     delete: createHandler('DeleteItem'),
