@@ -20,16 +20,16 @@ describe('unmarshall', () => {
       null: { NULL: true },
       boolTruthy: { BOOL: true },
       boolFalsy: { BOOL: false },
-      map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
-      stringset: { SS: ['foo', 'bar'] }
+      object: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+      arrayOfStrings: { SS: ['foo', 'bar'] }
     })).toEqual({
       string: 'foo',
       number: 2,
       null: null,
       boolTruthy: true,
       boolFalsy: false,
-      map: { foo: 'bar', moof: 'doof' },
-      stringset: ['foo', 'bar']
+      object: { foo: 'bar', moof: 'doof' },
+      arrayOfStrings: ['foo', 'bar']
     })
   })
 
@@ -41,8 +41,8 @@ describe('unmarshall', () => {
         null: { NULL: true },
         boolTruthy: { BOOL: true },
         boolFalsy: { BOOL: false },
-        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
-        stringset: { SS: ['foo', 'bar'] }
+        object: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+        arrayOfStrings: { SS: ['foo', 'bar'] }
       },
       {
         string: { S: 'foo' },
@@ -50,8 +50,8 @@ describe('unmarshall', () => {
         null: { NULL: true },
         boolTruthy: { BOOL: true },
         boolFalsy: { BOOL: false },
-        map: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
-        stringset: { SS: ['foo', 'bar'] }
+        object: { M: { foo: { S: 'bar' }, moof: { S: 'doof' } } },
+        arrayOfStrings: { SS: ['foo', 'bar'] }
       }
     ])).toEqual([
       {
@@ -60,8 +60,8 @@ describe('unmarshall', () => {
         null: null,
         boolTruthy: true,
         boolFalsy: false,
-        map: { foo: 'bar', moof: 'doof' },
-        stringset: ['foo', 'bar']
+        object: { foo: 'bar', moof: 'doof' },
+        arrayOfStrings: ['foo', 'bar']
       },
       {
         string: 'foo',
@@ -69,8 +69,8 @@ describe('unmarshall', () => {
         null: null,
         boolTruthy: true,
         boolFalsy: false,
-        map: { foo: 'bar', moof: 'doof' },
-        stringset: ['foo', 'bar']
+        object: { foo: 'bar', moof: 'doof' },
+        arrayOfStrings: ['foo', 'bar']
       }
     ])
   })
