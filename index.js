@@ -16,6 +16,7 @@ const aws4OnlyProperties = ['headers', 'body', 'url', 'host']
 const debugRequest = configureDebug('aws-dynamodb-axios:requests')
 const debugResponse = configureDebug('aws-dynamodb-axios:responses')
 const debugError = configureDebug('aws-dynamodb-axios:errors')
+const debugSplits = configureDebug('aws-dynamodb-axios:splits')
 
 const buildHandler = ({ client, host, url, protocol }) =>
   action =>
@@ -32,18 +33,22 @@ const buildHandler = ({ client, host, url, protocol }) =>
 
       debugRequest('signing request: %O', { url, body, host, headers, method: 'POST' })
 
+      debugSplits('sign request start %s', action)
       const signedRequest = aws4.sign(
         { url, body, host, headers, method: 'POST' },
         credentials
       )
+      debugSplits('sign request end %s', action)
 
       let response
       try {
+        debugSplits('send request start %s', action)
         response = await client({
           data,
           headers,
           ...omit(signedRequest, aws4OnlyProperties)
         })
+        debugSplits('send request end %s', action)
       } catch (error) {
         debugError('error message: %s', error.message)
         if (!error.response) throw error
