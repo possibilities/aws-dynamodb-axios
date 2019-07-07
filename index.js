@@ -46,16 +46,6 @@ const buildHandler = ({ client, host, url, protocol }) =>
       return response.data
     }
 
-const allApiVerbs = [
-  'get',
-  'put',
-  'options',
-  'patch',
-  'post',
-  'delete',
-  'head'
-]
-
 const dynamodb = (options = {}) => {
   const host = options.host || regionToEndpoint[options.region]
 
