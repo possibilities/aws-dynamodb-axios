@@ -3,6 +3,7 @@ const aws4 = require('aws4')
 const createError = require('./modules/createError')
 const omit = require('./modules/omit')
 const { apiVersion, regionToEndpoint } = require('./constants')
+const configureDebug = require('debug')
 
 const credentials = {
   sessionToken: process.env.AWS_SESSION_TOKEN,
@@ -12,9 +13,15 @@ const credentials = {
 
 const aws4OnlyProperties = ['headers', 'body', 'url', 'host']
 
+const debugRequest = configureDebug('aws-dynamodb-axios:requests')
+const debugResponse = configureDebug('aws-dynamodb-axios:responses')
+const debugError = configureDebug('aws-dynamodb-axios:errors')
+
 const buildHandler = ({ client, host, url, protocol }) =>
   action =>
     async data => {
+      debugRequest('action: %s', action)
+
       const headers = {
         'X-Amz-Target': `DynamoDB_${apiVersion}.${action}`,
         'Content-Type': 'application/x-amz-json-1.0'
@@ -22,6 +29,8 @@ const buildHandler = ({ client, host, url, protocol }) =>
 
       // `aws4` expects `body`, `axios` expects `data`
       const body = JSON.stringify(data)
+
+      debugRequest('signing request: %O', { url, body, host, headers, method: 'POST' })
 
       const signedRequest = aws4.sign(
         { url, body, host, headers, method: 'POST' },
@@ -36,13 +45,17 @@ const buildHandler = ({ client, host, url, protocol }) =>
           ...omit(signedRequest, aws4OnlyProperties)
         })
       } catch (error) {
+        debugError('error message: %s', error.message)
         if (!error.response) throw error
+        debugError('error data: %O', error.response.data)
+        debugError('error status: %s', error.response.status)
         const { status, data: errorData } = error.response
         const dynamoError = createError(status, errorData.message, error)
         dynamoError.data = error.response.data
         throw dynamoError
       }
 
+      debugResponse('response data: %O', response.data)
       return response.data
     }
 
